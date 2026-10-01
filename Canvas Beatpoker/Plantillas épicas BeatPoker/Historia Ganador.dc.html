@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#191410; font-family:'Barlow Condensed',sans-serif; }
+  a { color:#D4A017; }
+  a:hover { color:#F5D879; }
+  @keyframes bpGlow { 0%,100%{opacity:.55;} 50%{opacity:.9;} }
+</style>
+</helmet>
+
+<section id="1a" style="min-height:100vh;box-sizing:border-box;padding:70px 60px 120px;display:flex;flex-direction:column;align-items:center;gap:26px;background:#191410;">
+
+  <div style="display:flex;align-items:center;gap:16px;align-self:flex-start;">
+    <span style="display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 16px;border-radius:999px;background:#D4A017;color:#1a1206;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;letter-spacing:1px;">1a</span>
+    <div style="font-family:'Barlow Condensed',sans-serif;color:#c9bfa6;font-size:22px;letter-spacing:3px;text-transform:uppercase;font-weight:600;">Historia de Ganador · 1080×1920 · propuesta</div>
+  </div>
+
+  <!-- ====================== ARTBOARD ====================== -->
+  <div style="position:relative;width:1080px;height:1920px;overflow:hidden;background:#0d0b07;border-radius:10px;box-shadow:0 40px 120px rgba(0,0,0,.6);font-family:'Barlow Condensed',sans-serif;color:#fff;">
+
+    <!-- BG LAYERS -->
+    <div style="position:absolute;inset:0;background:radial-gradient(120% 70% at 50% 0%, #2a2110 0%, #14100a 42%, #0a0805 100%);"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(60% 30% at 50% 8%, rgba(212,160,23,.30), rgba(212,160,23,0) 70%);animation:bpGlow 6s ease-in-out infinite;"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(70% 40% at 50% 92%, rgba(176,52,24,.22), rgba(176,52,24,0) 70%);"></div>
+    <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(212,160,23,.10) 1px, transparent 1.4px);background-size:34px 34px;opacity:.5;"></div>
+    <!-- gold frame + side hairlines -->
+    <div style="position:absolute;inset:0;box-shadow:inset 0 0 0 2px rgba(212,160,23,.35);pointer-events:none;"></div>
+    <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:linear-gradient(180deg,transparent,rgba(212,160,23,.55) 20%,rgba(212,160,23,.55) 80%,transparent);"></div>
+    <div style="position:absolute;top:0;bottom:0;right:34px;width:1px;background:linear-gradient(180deg,transparent,rgba(212,160,23,.55) 20%,rgba(212,160,23,.55) 80%,transparent);"></div>
+
+    <!-- ===== ZONA FOTO ===== -->
+    <div style="position:absolute;top:0;left:0;right:0;height:1080px;">
+      <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="win-photo" shape="rect" fit="cover" src="assets/player_demo.png" placeholder="ZONA FOTO — arrastra la foto del jugador" hint-size="100%,100%"></x-import>
+      <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, rgba(10,8,5,.72) 0%, rgba(10,8,5,0) 24%, rgba(10,8,5,0) 46%, rgba(13,11,7,.55) 74%, #0d0b07 100%);"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:200px;pointer-events:none;background:linear-gradient(180deg, rgba(13,11,7,0), #0d0b07 88%);"></div>
+    </div>
+
+    <!-- ===== ZONA LOGOS (cabecera) ===== -->
+    <div style="position:absolute;top:52px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:34px;z-index:5;">
+      <img src="assets/osop_logo.png" alt="OSOP" style="height:150px;width:auto;filter:drop-shadow(0 6px 16px rgba(0,0,0,.6));">
+      <div style="width:2px;height:96px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.55),transparent);"></div>
+      <!-- BeatPoker wordmark -->
+      <div style="display:flex;align-items:center;gap:14px;color:#fff;filter:drop-shadow(0 3px 10px rgba(0,0,0,.7));">
+        <div style="position:relative;font-family:Georgia,'Times New Roman',serif;font-size:64px;line-height:1;">&#9827;
+          <div style="position:absolute;left:52%;top:6%;width:3px;height:90%;background:currentColor;transform:translateX(-50%) rotate(32deg);transform-origin:center;border-radius:2px;"></div>
+        </div>
+        <div style="font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:40px;line-height:.86;letter-spacing:2px;">
+          <div>BEAT</div><div>POKER</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ETIQUETA CAMPEÓN ===== -->
+    <div style="position:absolute;top:250px;left:60px;z-index:5;display:inline-flex;align-items:center;gap:12px;padding:12px 26px 12px 22px;background:linear-gradient(135deg,#F5D879,#D4A017 55%,#a97a12);color:#1a1206;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.5);font-weight:800;letter-spacing:3px;font-size:26px;text-transform:uppercase;">
+      <span style="font-size:28px;line-height:1;">&#9733;</span>CAMPEÓN
+    </div>
+
+    <!-- ===== ZONA CONTENIDO (panel inferior) ===== -->
+    <div style="position:absolute;left:0;right:0;bottom:0;top:1000px;display:flex;flex-direction:column;justify-content:flex-end;gap:34px;padding:0 66px 68px;z-index:4;">
+
+      <!-- TÍTULO -->
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="color:#F5D879;font-weight:700;letter-spacing:6px;font-size:30px;text-transform:uppercase;">Main Event · OSOP</div>
+        <div style="font-family:'Anton',sans-serif;font-size:96px;line-height:.9;letter-spacing:1px;text-transform:uppercase;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.6);">Campeón<br>del Main Event</div>
+      </div>
+
+      <!-- MONTO -->
+      <div style="display:flex;flex-direction:column;">
+        <div style="color:#c9bfa6;font-weight:700;letter-spacing:7px;font-size:28px;text-transform:uppercase;margin-bottom:2px;">Premio ganado</div>
+        <div style="display:flex;align-items:baseline;gap:14px;">
+          <span style="font-family:'Anton',sans-serif;font-size:190px;line-height:.82;letter-spacing:-1px;background:linear-gradient(180deg,#FBEBA6 0%,#F5D879 32%,#D4A017 62%,#a97a12 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 8px 26px rgba(212,160,23,.35));">$18.500.000</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:44px;color:#D4A017;letter-spacing:2px;">CLP</span>
+        </div>
+      </div>
+
+      <!-- BARRA NOMBRE + BANDERA -->
+      <div style="display:flex;align-items:stretch;gap:0;border-radius:8px;overflow:hidden;box-shadow:0 12px 34px rgba(0,0,0,.45);">
+        <div style="width:6px;background:linear-gradient(180deg,#F5D879,#D4A017,#a97a12);"></div>
+        <div style="flex:1;display:flex;align-items:center;gap:22px;background:linear-gradient(90deg,#241c10,#191308);padding:16px 24px;">
+          <div style="position:relative;width:88px;height:58px;border-radius:5px;overflow:hidden;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.2);">
+            <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="win-flag" shape="rect" fit="cover" src="assets/flag_chile.png" placeholder="BANDERA" hint-size="100%,100%"></x-import>
+          </div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:60px;line-height:.92;text-transform:uppercase;letter-spacing:.5px;color:#fff;">Juan Carlos Carrasco</div>
+        </div>
+      </div>
+
+      <!-- BAJADA -->
+      <div style="color:#c9bfa6;font-weight:500;font-size:33px;line-height:1.18;max-width:900px;">
+        Se quedó con el título más importante de la serie tras dominar la mesa final del Main Event OSOP en Ovalle Casino &amp; Resort.
+      </div>
+
+      <!-- FOOTER LOGOS / SPONSORS -->
+      <div style="margin-top:6px;padding-top:26px;border-top:1px solid rgba(212,160,23,.28);display:flex;align-items:center;justify-content:space-between;gap:20px;">
+        <!-- BeatPoker gold -->
+        <div style="display:flex;align-items:center;gap:12px;color:#D4A017;">
+          <div style="position:relative;font-family:Georgia,serif;font-size:46px;line-height:1;">&#9827;
+            <div style="position:absolute;left:52%;top:6%;width:2px;height:90%;background:currentColor;transform:translateX(-50%) rotate(32deg);transform-origin:center;border-radius:2px;"></div>
+          </div>
+          <div style="font-family:Georgia,serif;font-weight:700;font-size:28px;line-height:.86;letter-spacing:1.5px;">
+            <div>BEAT</div><div>POKER</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span style="color:#8f866f;font-weight:600;letter-spacing:3px;font-size:22px;text-transform:uppercase;">Presentado por</span>
+          <div style="width:190px;height:74px;border-radius:8px;border:1px dashed rgba(212,160,23,.5);display:flex;align-items:center;justify-content:center;overflow:hidden;background:rgba(255,255,255,.03);">
+            <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="win-sponsor" shape="rect" fit="contain" placeholder="LOGO SPONSOR" hint-size="100%,100%"></x-import>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</x-dc>
+</body>
+</html>

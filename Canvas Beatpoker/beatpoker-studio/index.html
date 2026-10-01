@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BeatPoker Studio</title>
+<meta name="description" content="Editor de plantillas de cobertura para BeatPoker.">
+<link rel="icon" href="./assets/beatpoker_logo.png">
+<link rel="preload" as="font" type="font/woff2" href="./fonts/anton-400-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="./fonts/barlow-condensed-700-latin.woff2" crossorigin>
+<link rel="stylesheet" href="./fonts/fonts.css">
+<script src="./vendor/react.production.min.js"></script>
+<script src="./vendor/react-dom.production.min.js"></script>
+<script src="./vendor/html-to-image.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:#14100b;font-family:'Barlow Condensed',sans-serif;overflow-x:auto;overflow-y:hidden;}
+  a{color:#D4A017;} a:hover{color:#F5D879;}
+  input,textarea,select,button{font-family:'Barlow Condensed',sans-serif;}
+  input[type=range]{-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:rgba(212,160,23,.28);}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#D4A017;cursor:pointer;box-shadow:0 0 0 4px rgba(212,160,23,.18);}
+  ::-webkit-scrollbar{width:10px;height:10px;} ::-webkit-scrollbar-thumb{background:rgba(212,160,23,.3);border-radius:6px;} ::-webkit-scrollbar-track{background:transparent;}
+  @keyframes bpGlow{0%,100%{opacity:.55;}50%{opacity:.9;}}
+  @keyframes livePulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.7);}}
+</style>
+</helmet>
+
+<div style="display:flex;height:100vh;width:100vw;min-width:1180px;overflow:hidden;background:#14100b;color:#e8e0cf;">
+
+  <!-- ================= SIDEBAR / GALERÍA ================= -->
+  <aside style="width:288px;flex:none;background:#17130c;border-right:1px solid rgba(212,160,23,.16);display:flex;flex-direction:column;overflow-y:auto;">
+    <div style="padding:22px 22px 18px;border-bottom:1px solid rgba(212,160,23,.14);display:flex;align-items:center;gap:12px;">
+      <img src="assets/beatpoker_logo.png" alt="BeatPoker" style="height:30px;width:auto;">
+      <div style="margin-left:auto;font-weight:700;font-size:12px;letter-spacing:2px;color:#8f866f;text-transform:uppercase;">Studio</div>
+    </div>
+
+    <div style="padding:20px 20px 10px;font-size:13px;letter-spacing:3px;color:#8f866f;font-weight:700;text-transform:uppercase;">Plantillas</div>
+    <div style="padding:0 14px 20px;display:flex;flex-direction:column;gap:9px;">
+      <div onClick="{{ onSelectTpl }}" data-tpl="ganador" style="{{ cardGanador }}">
+        <div style="width:42px;height:60px;flex:none;border-radius:6px;background:radial-gradient(120% 60% at 50% 0,#2a2110,#0d0b07);border:1px solid rgba(212,160,23,.3);display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;"><span style="font-family:'Anton',sans-serif;font-size:16px;color:#D4A017;">$</span></div>
+        <div><div style="font-weight:700;font-size:19px;color:#fff;letter-spacing:.5px;">Ganador</div><div style="font-size:14px;color:#8f866f;">Premio y campeón</div></div>
+      </div>
+      <div onClick="{{ onSelectTpl }}" data-tpl="chipleader" style="{{ cardChip }}">
+        <div style="width:42px;height:60px;flex:none;border-radius:6px;background:radial-gradient(120% 60% at 50% 0,#2a2110,#0d0b07);border:1px solid rgba(212,160,23,.3);display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;"><span style="font-family:'Anton',sans-serif;font-size:15px;color:#D4A017;">1&deg;</span></div>
+        <div><div style="font-weight:700;font-size:19px;color:#fff;letter-spacing:.5px;">Chip Leader</div><div style="font-size:14px;color:#8f866f;">Líder de fichas</div></div>
+      </div>
+      <div onClick="{{ onSelectTpl }}" data-tpl="proximos" style="{{ cardProximos }}">
+        <div style="width:42px;height:60px;flex:none;border-radius:6px;background:radial-gradient(120% 60% at 50% 0,#2a2110,#0d0b07);border:1px solid rgba(212,160,23,.3);display:flex;align-items:center;justify-content:center;"><span style="font-family:'Anton',sans-serif;font-size:20px;color:#D4A017;">$</span></div>
+        <div><div style="font-weight:700;font-size:19px;color:#fff;letter-spacing:.5px;">Próximos eventos</div><div style="font-size:14px;color:#8f866f;">Anuncio / calendario</div></div>
+      </div>
+      <div onClick="{{ onSelectTpl }}" data-tpl="live" style="{{ cardLive }}">
+        <div style="width:42px;height:60px;flex:none;border-radius:6px;background:radial-gradient(120% 60% at 50% 0,#2a2110,#0d0b07);border:1px solid rgba(212,160,23,.3);display:flex;align-items:center;justify-content:center;"><span style="width:14px;height:14px;border-radius:50%;background:#c0341f;box-shadow:0 0 10px #c0341f;"></span></div>
+        <div><div style="font-weight:700;font-size:19px;color:#fff;letter-spacing:.5px;">Cobertura en vivo</div><div style="font-size:14px;color:#8f866f;">Live blog</div></div>
+      </div>
+      <div onClick="{{ onSelectTpl }}" data-tpl="resultados" style="{{ cardResultados }}">
+        <div style="width:42px;height:60px;flex:none;border-radius:6px;background:radial-gradient(120% 60% at 50% 0,#2a2110,#0d0b07);border:1px solid rgba(212,160,23,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:0 7px;">
+          <span style="width:100%;height:6px;border-radius:2px;background:linear-gradient(90deg,#F5D879,#D4A017);"></span>
+          <span style="width:100%;height:6px;border-radius:2px;background:rgba(212,160,23,.45);"></span>
+          <span style="width:100%;height:6px;border-radius:2px;background:rgba(212,160,23,.25);"></span>
+        </div>
+        <div><div style="font-weight:700;font-size:19px;color:#fff;letter-spacing:.5px;">Resultados</div><div style="font-size:14px;color:#8f866f;">Podio y posiciones</div></div>
+      </div>
+      <div onClick="{{ onSelectTpl }}" data-tpl="mesa" style="{{ cardMesa }}">
+        <div style="width:42px;height:60px;flex:none;border-radius:6px;background:radial-gradient(120% 60% at 50% 0,#2a2110,#0d0b07);border:1px solid rgba(212,160,23,.3);display:flex;align-items:center;justify-content:center;">
+          <span style="width:30px;height:20px;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#7a2a1c,#2a0b07);box-shadow:0 0 0 2px rgba(212,160,23,.6);"></span>
+        </div>
+        <div><div style="font-weight:700;font-size:19px;color:#fff;letter-spacing:.5px;">Mesa</div><div style="font-size:14px;color:#8f866f;">Asientos y fichas</div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:auto;padding:18px 20px;border-top:1px solid rgba(212,160,23,.12);font-size:14px;color:#7a7259;line-height:1.35;">Elige una plantilla y edítala en el panel derecho. El diseño se acomoda solo — no se rompe.<br><br>Tu trabajo se guarda solo en este navegador.</div>
+  </aside>
+
+  <!-- ================= CENTRO / LIENZO ================= -->
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column;">
+    <div style="height:66px;flex:none;border-bottom:1px solid rgba(212,160,23,.16);display:flex;align-items:center;gap:16px;padding:0 22px;background:#17130c;">
+      <div style="font-weight:700;font-size:20px;color:#fff;letter-spacing:.5px;">{{ tplTitle }}</div>
+      <div style="display:flex;background:#0f0c07;border:1px solid rgba(212,160,23,.22);border-radius:10px;padding:3px;margin-left:8px;">
+        <button onClick="{{ onFormat }}" data-fmt="story" style="{{ storyBtnStyle }}">Historia 9:16</button>
+        <button onClick="{{ onFormat }}" data-fmt="post" style="{{ postBtnStyle }}">Post 4:5</button>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:14px;">
+        <span style="font-size:15px;color:#8f866f;">{{ zoomLabel }}</span>
+        <button onClick="{{ onReset }}" style="cursor:pointer;border:1px solid rgba(212,160,23,.3);background:transparent;color:#8f866f;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;padding:10px 16px;border-radius:10px;">Restablecer</button>
+        <button onClick="{{ onExport }}" style="{{ exportBtnStyle }}">
+          <span style="font-size:18px;">&#8595;</span> {{ exportLabel }}
+        </button>
+      </div>
+    </div>
+
+    <div ref="{{ onStageRef }}" style="flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:36px;background:radial-gradient(80% 80% at 50% 40%,#1b160e,#100c07);">
+      <div style="width:{{ scaledW }}px;height:{{ scaledH }}px;flex:none;">
+
+        <!-- ============ ARTBOARD ============ -->
+        <div ref="{{ onArtRef }}" data-art="1" style="width:{{ artW }}px;height:{{ artH }}px;transform:scale({{ scale }});transform-origin:top left;position:relative;overflow:hidden;background:#0d0b07;font-family:'Barlow Condensed',sans-serif;color:#fff;box-shadow:0 30px 90px rgba(0,0,0,.6);">
+
+          <div style="position:absolute;inset:0;background:#0d0b07;"></div>
+          <div style="position:absolute;inset:0;background:radial-gradient(60% 30% at 50% 8%, rgba(212,160,23,.28), rgba(212,160,23,0) 70%);animation:bpGlow 6s ease-in-out infinite;"></div>
+          <div style="position:absolute;inset:0;background:radial-gradient(70% 40% at 50% 92%, rgba(176,52,24,.22), rgba(176,52,24,0) 70%);"></div>
+          <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(212,160,23,.10) 1px, transparent 1.4px);background-size:34px 34px;opacity:.5;"></div>
+          <div style="position:absolute;inset:0;box-shadow:inset 0 0 0 2px rgba(212,160,23,.35);pointer-events:none;"></div>
+          <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:linear-gradient(180deg,transparent,rgba(212,160,23,.55) 20%,rgba(212,160,23,.55) 80%,transparent);"></div>
+          <div style="position:absolute;top:0;bottom:0;right:34px;width:1px;background:linear-gradient(180deg,transparent,rgba(212,160,23,.55) 20%,rgba(212,160,23,.55) 80%,transparent);"></div>
+
+          <!-- FOTO (subible en todas las plantillas) -->
+          <div style="position:absolute;top:0;left:0;right:0;height:{{ photoH }}px;overflow:hidden;">
+            <img src="{{ photoUrl }}" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% {{ photoPosY }}%;transform:scale({{ photoZoomF }});transform-origin:center;display:block;">
+            <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, rgba(9,7,4,.82) 0%, rgba(9,7,4,.28) 11%, rgba(13,11,7,0) 26%, rgba(13,11,7,0) 52%, rgba(13,11,7,.30) 66%, rgba(13,11,7,.65) 80%, rgba(13,11,7,.92) 92%, #0d0b07 99%, #0d0b07 100%);"></div>
+            <sc-if value="{{ isMesa }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;pointer-events:none;background:rgba(13,11,7,.68);"></div></sc-if>
+          </div>
+
+          <!-- CABECERA: BEAT POKER (izq, fijo) + EVENTO (der, recuadro editable) -->
+          <div style="position:absolute;top:46px;left:58px;right:46px;z-index:6;display:flex;align-items:center;justify-content:space-between;gap:20px;">
+            <img src="assets/beatpoker_white_logo.png" alt="BeatPoker" style="height:{{ bpLogoH }}px;width:auto;filter:drop-shadow(0 3px 14px rgba(0,0,0,.75));">
+            <div style="height:{{ evLogoBox }}px;width:{{ evLogoBox }}px;flex:none;display:flex;align-items:center;justify-content:center;">
+              <img src="{{ eventLogoUrl }}" alt="Evento" style="max-width:100%;max-height:100%;object-fit:contain;display:block;filter:drop-shadow(0 4px 16px rgba(0,0,0,.7));">
+            </div>
+          </div>
+
+          <!-- CONTENIDO -->
+          <!-- El contenido se ancla abajo y crece hacia arriba: el título se monta sobre el
+               degradado de la foto a propósito. Por eso `top` del medidor es el borde inferior
+               del header (el límite real), no donde empieza el texto: fitPanel encoge solo
+               cuando el contenido va a chocar con los logos.
+               El inner va en position:absolute, no como flex item: un flex item se aplasta
+               (flex-shrink) o desborda por abajo cuando no cabe, y en ambos casos su altura
+               deja de ser medible. Absolute mantiene la altura natural. -->
+          <div ref="{{ onPanelRef }}" style="position:absolute;left:0;right:0;bottom:0;top:{{ safeTop }}px;z-index:4;">
+            <div ref="{{ onPanelInnerRef }}" style="position:absolute;left:66px;right:66px;bottom:68px;display:flex;flex-direction:column;gap:{{ gap }}px;transform:scale({{ panelFit }});transform-origin:bottom center;">
+
+            <sc-if value="{{ isPersona }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none;display:flex;flex-direction:column;gap:6px;">
+              <div style="color:#F5D879;font-weight:700;letter-spacing:6px;font-size:30px;text-transform:uppercase;">{{ d.kicker }}</div>
+              <div style="font-family:'Anton',sans-serif;font-size:{{ sz.titulo }}px;line-height:1.02;letter-spacing:.5px;text-transform:uppercase;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.6);white-space:pre-line;padding-bottom:.04em;">{{ d.titulo }}</div>
+            </div>
+            <div style="flex:none;display:flex;flex-direction:column;">
+              <div style="color:#c9bfa6;font-weight:700;letter-spacing:7px;font-size:28px;text-transform:uppercase;margin-bottom:2px;">{{ d.montoLabel }}</div>
+              <div ref="{{ onMontoRef }}" style="display:inline-flex;align-items:baseline;gap:14px;white-space:nowrap;transform:scale({{ montoFit }});transform-origin:left center;">
+                <span style="font-family:'Anton',sans-serif;font-size:{{ sz.monto }}px;line-height:1;letter-spacing:-1px;display:inline-block;padding-bottom:.12em;background:linear-gradient(180deg,#FBEBA6 0%,#F5D879 32%,#D4A017 62%,#a97a12 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 8px 26px rgba(212,160,23,.35));">{{ d.monto }}</span>
+                <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:44px;color:#D4A017;letter-spacing:2px;">{{ d.moneda }}</span>
+              </div>
+            </div>
+            <div style="flex:none;display:flex;align-items:stretch;border-radius:8px;overflow:hidden;box-shadow:0 12px 34px rgba(0,0,0,.45);">
+              <div style="width:6px;background:linear-gradient(180deg,#F5D879,#D4A017,#a97a12);"></div>
+              <div style="flex:1;display:flex;align-items:center;gap:20px;background:linear-gradient(90deg,#241c10,#191308);padding:16px 24px;">
+                <sc-if value="{{ hasRank }}" hint-placeholder-val="{{ true }}"><div style="flex:none;font-family:'Anton',sans-serif;font-size:52px;line-height:1;color:#1a1206;background:linear-gradient(135deg,#F5D879,#D4A017);border-radius:8px;padding:6px 16px;">{{ d.rank }}</div></sc-if>
+                <sc-if value="{{ hasFlag }}" hint-placeholder-val="{{ true }}">
+                <div style="position:relative;width:88px;height:58px;border-radius:5px;overflow:hidden;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.2);">
+                  <img src="{{ flagUrl }}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+                </div>
+                </sc-if>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:{{ sz.nombre }}px;line-height:.92;text-transform:uppercase;letter-spacing:.5px;color:#fff;">{{ d.nombre }}</div>
+              </div>
+            </div>
+            <div style="flex:none;color:#c9bfa6;font-weight:500;font-size:32px;line-height:1.32;max-width:920px;">{{ d.bajada }}</div>
+            </sc-if>
+
+            <!-- PRÓXIMOS EVENTOS -->
+            <sc-if value="{{ isProximos }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;text-align:center;">
+              <div style="color:#F5D879;font-weight:700;letter-spacing:6px;font-size:30px;text-transform:uppercase;">{{ d.kicker }}</div>
+              <div style="font-family:'Anton',sans-serif;font-size:{{ sz.titulo }}px;line-height:1;letter-spacing:.5px;text-transform:uppercase;color:#fff;white-space:pre-line;margin-top:10px;">{{ d.titulo }}</div>
+            </div>
+            <div style="flex:none;display:flex;justify-content:center;">
+              <span style="display:inline-block;background:linear-gradient(135deg,#F5D879,#D4A017 60%,#a97a12);color:#1a1206;font-weight:800;letter-spacing:3px;font-size:34px;text-transform:uppercase;padding:12px 34px;border-radius:8px;box-shadow:0 8px 22px rgba(0,0,0,.4);">{{ d.fecha }}</span>
+            </div>
+            <div style="flex:none;display:flex;flex-direction:column;align-items:center;">
+              <div style="color:#c9bfa6;font-weight:700;letter-spacing:6px;font-size:26px;text-transform:uppercase;margin-bottom:4px;">{{ d.montoLabel }}</div>
+              <div ref="{{ onMontoRef }}" style="display:inline-flex;align-items:baseline;gap:12px;white-space:nowrap;transform:scale({{ montoFit }});transform-origin:center;">
+                <span style="font-family:'Anton',sans-serif;font-size:{{ sz.monto }}px;line-height:1;padding-bottom:.1em;background:linear-gradient(180deg,#FBEBA6,#F5D879 32%,#D4A017 62%,#a97a12);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 8px 26px rgba(212,160,23,.35));">{{ d.monto }}</span>
+                <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:40px;color:#D4A017;">{{ d.moneda }}</span>
+              </div>
+            </div>
+            <div style="flex:none;display:flex;gap:18px;justify-content:center;">
+              <div style="flex:1;max-width:380px;border:1px solid rgba(212,160,23,.35);border-radius:12px;padding:18px;text-align:center;background:rgba(255,255,255,.03);">
+                <div style="font-family:'Anton',sans-serif;font-size:52px;color:#F5D879;line-height:1;">{{ d.sub1val }}</div>
+                <div style="color:#c9bfa6;font-weight:700;letter-spacing:2px;font-size:22px;text-transform:uppercase;margin-top:6px;">{{ d.sub1label }}</div>
+              </div>
+              <div style="flex:1;max-width:380px;border:1px solid rgba(212,160,23,.35);border-radius:12px;padding:18px;text-align:center;background:rgba(255,255,255,.03);">
+                <div style="font-family:'Anton',sans-serif;font-size:52px;color:#F5D879;line-height:1;">{{ d.sub2val }}</div>
+                <div style="color:#c9bfa6;font-weight:700;letter-spacing:2px;font-size:22px;text-transform:uppercase;margin-top:6px;">{{ d.sub2label }}</div>
+              </div>
+            </div>
+            <div style="flex:none;text-align:center;color:#8f866f;font-weight:600;letter-spacing:3px;font-size:24px;text-transform:uppercase;">{{ d.nombre }}</div>
+            <div style="flex:none;text-align:center;color:#F5D879;font-weight:700;letter-spacing:2px;font-size:26px;text-transform:uppercase;">{{ d.bajada }}</div>
+            </sc-if>
+
+            <!-- LIVE BLOG -->
+            <sc-if value="{{ isLive }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+              <span style="display:inline-flex;align-items:center;gap:11px;background:#c0341f;color:#fff;font-weight:800;letter-spacing:2px;font-size:26px;text-transform:uppercase;padding:9px 20px;border-radius:6px;box-shadow:0 6px 18px rgba(192,52,31,.5);">
+                <span style="width:16px;height:16px;border-radius:50%;background:#fff;animation:livePulse 1.2s ease-in-out infinite;"></span>En Vivo
+              </span>
+              <span style="color:#F5D879;font-weight:700;letter-spacing:5px;font-size:28px;text-transform:uppercase;">{{ d.kicker }}</span>
+            </div>
+            <div style="flex:none;font-family:'Anton',sans-serif;font-size:{{ sz.titulo }}px;line-height:1.02;letter-spacing:.5px;text-transform:uppercase;color:#fff;white-space:pre-line;padding-bottom:.04em;">{{ d.titulo }}</div>
+            <div style="flex:none;display:flex;flex-wrap:wrap;gap:16px;">
+              <sc-if value="{{ hasFichas }}" hint-placeholder-val="{{ true }}"><div style="flex:1 1 44%;min-width:300px;border:1px solid rgba(212,160,23,.3);border-radius:12px;padding:16px 22px;background:rgba(255,255,255,.03);"><div style="color:#8f866f;font-weight:700;letter-spacing:2px;font-size:20px;text-transform:uppercase;">{{ d.labelFichas }}</div><div style="font-family:'Anton',sans-serif;font-size:50px;color:#F5D879;line-height:1;margin-top:4px;">{{ d.statFichas }}</div></div></sc-if>
+              <sc-if value="{{ hasNivel }}" hint-placeholder-val="{{ true }}"><div style="flex:1 1 44%;min-width:300px;border:1px solid rgba(212,160,23,.3);border-radius:12px;padding:16px 22px;background:rgba(255,255,255,.03);"><div style="color:#8f866f;font-weight:700;letter-spacing:2px;font-size:20px;text-transform:uppercase;">{{ d.labelNivel }}</div><div style="font-family:'Anton',sans-serif;font-size:50px;color:#F5D879;line-height:1;margin-top:4px;">{{ d.statNivel }}</div></div></sc-if>
+              <sc-if value="{{ hasJugadores }}" hint-placeholder-val="{{ true }}"><div style="flex:1 1 44%;min-width:300px;border:1px solid rgba(212,160,23,.3);border-radius:12px;padding:16px 22px;background:rgba(255,255,255,.03);"><div style="color:#8f866f;font-weight:700;letter-spacing:2px;font-size:20px;text-transform:uppercase;">{{ d.labelJugadores }}</div><div style="font-family:'Anton',sans-serif;font-size:50px;color:#F5D879;line-height:1;margin-top:4px;">{{ d.statJugadores }}</div></div></sc-if>
+              <sc-if value="{{ hasBuyin }}" hint-placeholder-val="{{ true }}"><div style="flex:1 1 44%;min-width:300px;border:1px solid rgba(212,160,23,.3);border-radius:12px;padding:16px 22px;background:rgba(255,255,255,.03);"><div style="color:#8f866f;font-weight:700;letter-spacing:2px;font-size:20px;text-transform:uppercase;">{{ d.labelBuyin }}</div><div style="font-family:'Anton',sans-serif;font-size:50px;color:#F5D879;line-height:1;margin-top:4px;">{{ d.statBuyin }}</div></div></sc-if>
+              <sc-if value="{{ hasGarantizado }}" hint-placeholder-val="{{ true }}"><div style="flex:1 1 44%;min-width:300px;border:1px solid rgba(212,160,23,.3);border-radius:12px;padding:16px 22px;background:rgba(255,255,255,.03);"><div style="color:#8f866f;font-weight:700;letter-spacing:2px;font-size:20px;text-transform:uppercase;">{{ d.labelGarantizado }}</div><div style="font-family:'Anton',sans-serif;font-size:50px;color:#F5D879;line-height:1;margin-top:4px;">{{ d.statGarantizado }}</div></div></sc-if>
+              <sc-if value="{{ hasFecha }}" hint-placeholder-val="{{ true }}"><div style="flex:1 1 44%;min-width:300px;border:1px solid rgba(212,160,23,.3);border-radius:12px;padding:16px 22px;background:rgba(255,255,255,.03);"><div style="color:#8f866f;font-weight:700;letter-spacing:2px;font-size:20px;text-transform:uppercase;">{{ d.labelFecha }}</div><div style="font-family:'Anton',sans-serif;font-size:50px;color:#F5D879;line-height:1;margin-top:4px;">{{ d.statFecha }}</div></div></sc-if>
+            </div>
+            </sc-if>
+
+            <!-- RESULTADOS / POSICIONES -->
+            <sc-if value="{{ isResultados }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;display:flex;flex-direction:column;gap:6px;">
+              <div style="color:#F5D879;font-weight:700;letter-spacing:6px;font-size:30px;text-transform:uppercase;">{{ d.kicker }}</div>
+              <div style="font-family:'Anton',sans-serif;font-size:{{ sz.titulo }}px;line-height:1.02;letter-spacing:.5px;text-transform:uppercase;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.6);white-space:pre-line;padding-bottom:.04em;">{{ d.titulo }}</div>
+            </div>
+            <div style="flex:none;display:flex;flex-direction:column;gap:{{ rowGap }}px;">
+              <sc-for list="{{ rows }}" as="r">
+                <div style="{{ r.rowStyle }}">
+                  <div style="{{ r.badgeStyle }}">{{ r.pos }}</div>
+                  <div style="{{ r.nameStyle }}">{{ r.nombre }}</div>
+                  <div style="{{ r.prizeStyle }}">{{ r.premio }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ hasBajada }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none;color:#c9bfa6;font-weight:500;font-size:30px;line-height:1.3;max-width:920px;">{{ d.bajada }}</div>
+            </sc-if>
+            </sc-if>
+
+            <!-- MESA: asientos en orden + conteo de fichas -->
+            <sc-if value="{{ isMesa }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;display:flex;flex-direction:column;gap:6px;">
+              <div style="color:#F5D879;font-weight:700;letter-spacing:6px;font-size:30px;text-transform:uppercase;">{{ d.kicker }}</div>
+              <div style="font-family:'Anton',sans-serif;font-size:{{ sz.titulo }}px;line-height:1.02;letter-spacing:.5px;text-transform:uppercase;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.6);white-space:pre-line;padding-bottom:.04em;">{{ d.titulo }}</div>
+            </div>
+            <div style="flex:none;position:relative;height:{{ mesa.h }}px;">
+              <div style="{{ mesa.feltStyle }}">
+                <div style="display:flex;gap:10px;">
+                  <span style="width:50px;height:70px;border-radius:7px;border:1px solid rgba(212,160,23,.28);background:rgba(0,0,0,.18);"></span>
+                  <span style="width:50px;height:70px;border-radius:7px;border:1px solid rgba(212,160,23,.28);background:rgba(0,0,0,.18);"></span>
+                  <span style="width:50px;height:70px;border-radius:7px;border:1px solid rgba(212,160,23,.28);background:rgba(0,0,0,.18);"></span>
+                  <span style="width:50px;height:70px;border-radius:7px;border:1px solid rgba(212,160,23,.28);background:rgba(0,0,0,.18);"></span>
+                  <span style="width:50px;height:70px;border-radius:7px;border:1px solid rgba(212,160,23,.28);background:rgba(0,0,0,.18);"></span>
+                </div>
+                <div style="margin-top:16px;color:rgba(245,216,121,.7);font-weight:700;letter-spacing:5px;font-size:24px;text-transform:uppercase;text-align:center;">{{ d.centro }}</div>
+              </div>
+              <sc-for list="{{ mesa.seats }}" as="s">
+                <div style="{{ s.style }}">
+                  <div style="position:relative;z-index:2;width:84px;height:84px;margin-bottom:-28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#3a2d14,#14100a);border:3px solid #D4A017;box-shadow:0 6px 16px rgba(0,0,0,.55);font-family:'Anton',sans-serif;font-size:40px;line-height:1;color:#F5D879;">
+                    <img src="{{ s.photoUrl }}" alt="" style="{{ s.photoStyle }}">
+                    <span style="{{ s.numStyle }}">{{ s.pos }}</span>
+                    <span style="{{ s.badgeStyle }}">{{ s.pos }}</span>
+                  </div>
+                  <div style="width:100%;padding:34px 8px 9px;border-radius:12px;border:1px solid rgba(212,160,23,.45);background:linear-gradient(180deg,#241c10,#140f08);box-shadow:0 10px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;gap:3px;">
+                    <div style="{{ s.nameStyle }}">{{ s.nombre }}</div>
+                    <div style="font-family:'Anton',sans-serif;font-size:32px;line-height:1;color:#F5D879;">{{ s.k }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ showRanking }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none;display:flex;align-items:baseline;justify-content:space-between;gap:20px;border-bottom:1px solid rgba(212,160,23,.28);padding-bottom:8px;">
+              <span style="color:#F5D879;font-weight:700;letter-spacing:5px;font-size:26px;text-transform:uppercase;">Conteo de fichas</span>
+              <span style="color:#c9bfa6;font-weight:700;letter-spacing:3px;font-size:24px;text-transform:uppercase;">{{ d.nivel }}</span>
+            </div>
+            <div style="flex:none;display:flex;flex-direction:column;gap:{{ mesa.rowGap }}px;">
+              <sc-for list="{{ mesa.ranking }}" as="r">
+                <div style="{{ r.rowStyle }}">
+                  <div style="{{ r.badgeStyle }}">{{ r.rank }}</div>
+                  <div style="{{ r.nameStyle }}">{{ r.nombre }}</div>
+                  <div style="{{ r.chipsStyle }}">{{ r.fichas }}</div>
+                  <div style="{{ r.bbStyle }}">{{ r.bb }}</div>
+                </div>
+              </sc-for>
+            </div>
+            </sc-if>
+            </sc-if>
+
+            <div style="flex:none;margin-top:6px;padding-top:26px;border-top:1px solid rgba(212,160,23,.28);display:flex;align-items:center;justify-content:space-between;gap:20px;">
+              <img src="assets/beatpoker_logo.png" alt="BeatPoker" style="height:54px;width:auto;">
+              <div style="display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.06);border:2px solid rgba(212,160,23,.5);border-radius:999px;padding:12px 30px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06);">
+                <span style="position:relative;display:inline-block;width:26px;height:26px;border:4px solid #D4A017;border-radius:50%;"><span style="position:absolute;width:13px;height:4px;background:#D4A017;bottom:-3px;right:-7px;transform:rotate(45deg);border-radius:2px;"></span></span>
+                <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:38px;color:#fff;letter-spacing:.5px;">{{ d.web }}</span>
+              </div>
+            </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= PANEL EDITAR ================= -->
+  <aside style="width:376px;flex:none;background:#17130c;border-left:1px solid rgba(212,160,23,.16);display:flex;flex-direction:column;overflow-y:auto;">
+    <div style="padding:18px 22px 14px;border-bottom:1px solid rgba(212,160,23,.14);">
+      <div style="font-weight:800;font-size:16px;letter-spacing:3px;color:#fff;text-transform:uppercase;">Editar</div>
+      <div style="font-size:14px;color:#7a7259;margin-top:3px;">Texto, tamaños e imágenes.</div>
+    </div>
+    <div style="padding:18px 22px 44px;display:flex;flex-direction:column;gap:24px;">
+
+      <!-- IMÁGENES Y LOGOS -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:13px;letter-spacing:3px;color:#D4A017;font-weight:700;text-transform:uppercase;">Imágenes y logos</div>
+        <label style="display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;width:100%;padding:13px;border-radius:10px;border:1px solid rgba(212,160,23,.38);background:rgba(212,160,23,.10);color:#F5D879;font-weight:700;font-size:17px;letter-spacing:1px;text-transform:uppercase;">
+          <span style="font-size:19px;">&#128247;</span> Cambiar foto
+          <input type="file" accept="image/*" data-target="photo" onChange="{{ onFile }}" style="display:none;">
+        </label>
+        <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:14px;color:#8f866f;width:96px;">Subir/bajar</span><input type="range" min="0" max="100" data-frame="photoPosY" value="{{ photoPosY }}" onChange="{{ onFrame }}" style="flex:1;"></div>
+        <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:14px;color:#8f866f;width:96px;">Zoom foto</span><input type="range" min="100" max="220" data-frame="photoZoom" value="{{ photoZoom }}" onChange="{{ onFrame }}" style="flex:1;"></div>
+        <label style="display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;width:100%;padding:12px;border-radius:10px;border:1px solid rgba(212,160,23,.28);color:#c9bfa6;font-weight:600;font-size:16px;letter-spacing:1px;text-transform:uppercase;">
+          <span style="font-size:18px;">&#127942;</span> Logo del evento (der.)
+          <input type="file" accept="image/*" data-target="event" onChange="{{ onFile }}" style="display:none;">
+        </label>
+        <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:14px;color:#8f866f;width:96px;">Tamaño logos</span><input type="range" min="90" max="230" data-size="logoSize" value="{{ szBase.logoSize }}" onChange="{{ onSize }}" style="flex:1;"></div>
+        <sc-if value="{{ showFlagSel }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">{{ flagLabel }}</label>
+          <label style="display:none">Bandera del país</label>
+          <select value="{{ flagCode }}" onChange="{{ onFlag }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:11px 12px;outline:none;">
+            <option value="cl">Chile</option>
+            <option value="ar">Argentina</option>
+            <option value="pe">Perú</option>
+            <option value="br">Brasil</option>
+            <option value="mx">México</option>
+            <option value="co">Colombia</option>
+            <option value="uy">Uruguay</option>
+            <option value="py">Paraguay</option>
+            <option value="bo">Bolivia</option>
+            <option value="ec">Ecuador</option>
+            <option value="ve">Venezuela</option>
+            <option value="es">España</option>
+            <option value="us">Estados Unidos</option>
+            <option value="none">Sin bandera</option>
+          </select>
+        </div>
+        </sc-if>
+      </div>
+
+      <div style="height:1px;background:rgba(212,160,23,.14);"></div>
+
+      <!-- TEXTOS -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font-size:13px;letter-spacing:3px;color:#D4A017;font-weight:700;text-transform:uppercase;">Textos</div>
+
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Línea superior</label>
+          <input data-field="kicker" value="{{ d.kicker }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;">
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Título (Enter = salto de línea)</label>
+          <textarea data-field="titulo" value="{{ d.titulo }}" onChange="{{ onField }}" rows="2" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;resize:vertical;line-height:1.15;"></textarea>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:#8f866f;width:58px;">Tamaño</span><input type="range" min="56" max="180" data-size="titulo" value="{{ szBase.titulo }}" onChange="{{ onSize }}" style="flex:1;"></div>
+        </div>
+
+        <sc-if value="{{ isChip }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Posición (ej. 1&deg;)</label>
+          <input data-field="rank" value="{{ d.rank }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;">
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ showMonto }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Etiqueta del número</label>
+          <input data-field="montoLabel" value="{{ d.montoLabel }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;">
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;">
+            <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Número</label>
+            <input data-field="monto" value="{{ d.monto }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;">
+          </div>
+          <div style="width:100px;display:flex;flex-direction:column;gap:5px;">
+            <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Unidad</label>
+            <input data-field="moneda" value="{{ d.moneda }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;">
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:#8f866f;width:58px;">Tamaño</span><input type="range" min="110" max="240" data-size="monto" value="{{ szBase.monto }}" onChange="{{ onSize }}" style="flex:1;"></div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Nombre del jugador</label>
+          <input data-field="nombre" value="{{ d.nombre }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;">
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:#8f866f;width:58px;">Tamaño</span><input type="range" min="40" max="80" data-size="nombre" value="{{ szBase.nombre }}" onChange="{{ onSize }}" style="flex:1;"></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isProximos }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Fechas</label>
+          <input data-field="fecha" value="{{ d.fecha }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;">
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Garantía 1</label><input data-field="sub1val" value="{{ d.sub1val }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Etiqueta 1</label><input data-field="sub1label" value="{{ d.sub1label }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Garantía 2</label><input data-field="sub2val" value="{{ d.sub2val }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Etiqueta 2</label><input data-field="sub2label" value="{{ d.sub2label }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isLive }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:14px;color:#7a7259;line-height:1.35;">Mini resumen — deja el <b style="color:#c9bfa6;">valor</b> vacío para ocultar el recuadro. El nombre de cada recuadro también se puede cambiar.</div>
+        <div style="display:flex;gap:10px;">
+          <div style="width:132px;display:flex;flex-direction:column;gap:5px;"><label style="font-size:13px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Nombre</label><input data-field="labelFichas" value="{{ d.labelFichas }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.18);border-radius:8px;color:#c9bfa6;font-size:16px;padding:10px 12px;outline:none;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><label style="font-size:13px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Valor</label><input data-field="statFichas" value="{{ d.statFichas }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="width:132px;display:flex;flex-direction:column;gap:5px;"><input data-field="labelNivel" value="{{ d.labelNivel }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.18);border-radius:8px;color:#c9bfa6;font-size:16px;padding:10px 12px;outline:none;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><input data-field="statNivel" value="{{ d.statNivel }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="width:132px;display:flex;flex-direction:column;gap:5px;"><input data-field="labelJugadores" value="{{ d.labelJugadores }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.18);border-radius:8px;color:#c9bfa6;font-size:16px;padding:10px 12px;outline:none;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><input data-field="statJugadores" value="{{ d.statJugadores }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="width:132px;display:flex;flex-direction:column;gap:5px;"><input data-field="labelBuyin" value="{{ d.labelBuyin }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.18);border-radius:8px;color:#c9bfa6;font-size:16px;padding:10px 12px;outline:none;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><input data-field="statBuyin" value="{{ d.statBuyin }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="width:132px;display:flex;flex-direction:column;gap:5px;"><input data-field="labelGarantizado" value="{{ d.labelGarantizado }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.18);border-radius:8px;color:#c9bfa6;font-size:16px;padding:10px 12px;outline:none;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><input data-field="statGarantizado" value="{{ d.statGarantizado }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="width:132px;display:flex;flex-direction:column;gap:5px;"><input data-field="labelFecha" value="{{ d.labelFecha }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.18);border-radius:8px;color:#c9bfa6;font-size:16px;padding:10px 12px;outline:none;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><input data-field="statFecha" value="{{ d.statFecha }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isResultados }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Posiciones</label>
+          <div style="font-size:14px;color:#7a7259;line-height:1.35;">Una línea por puesto, con el formato <b style="color:#c9bfa6;">Nombre | Premio</b>. El número de puesto se pone solo. Máximo 10.</div>
+          <textarea data-field="lista" value="{{ d.lista }}" onChange="{{ onField }}" rows="8" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:17px;padding:10px 12px;outline:none;resize:vertical;line-height:1.5;"></textarea>
+          <div style="font-size:14px;color:#7a7259;">{{ rowsCount }}</div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:#8f866f;width:58px;">Tamaño</span><input type="range" min="30" max="64" data-size="nombre" value="{{ szBase.nombre }}" onChange="{{ onSize }}" style="flex:1;"></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isMesa }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Jugadores (orden de la mesa)</label>
+          <div style="font-size:14px;color:#7a7259;line-height:1.35;">Una línea por jugador, <b style="color:#c9bfa6;">en orden de asiento</b> (el 1 va arriba, siguen en sentido horario): <b style="color:#c9bfa6;">Nombre | Fichas</b>. Máximo 10. Para cambiar el orden, mueve las líneas.</div>
+          <textarea data-field="mesa" value="{{ d.mesa }}" onChange="{{ onField }}" rows="10" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:17px;padding:10px 12px;outline:none;resize:vertical;line-height:1.5;white-space:pre;"></textarea>
+          <div style="font-size:14px;color:#7a7259;">{{ mesa.count }}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Fotos de los jugadores</label>
+          <div style="font-size:14px;color:#7a7259;line-height:1.35;">Toca el nombre para cambiar la foto. La foto queda ligada al nombre del jugador.</div>
+          <sc-for list="{{ mesa.seats }}" as="s">
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid rgba(212,160,23,.22);">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;flex:1;min-width:0;color:#c9bfa6;font-weight:600;font-size:16px;" title="Cambiar foto">
+                <span style="width:34px;height:34px;flex:none;border-radius:50%;overflow:hidden;background:#0f0c07;border:1px solid rgba(212,160,23,.4);display:block;"><img src="{{ s.photoUrl }}" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block;"></span>
+                <span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.pos }} · {{ s.nombre }}</span>
+                <span style="color:#D4A017;font-size:12px;letter-spacing:1px;text-transform:uppercase;">Foto</span>
+                <input type="file" accept="image/*" data-target="player" data-key="{{ s.key }}" onChange="{{ onFile }}" style="display:none;">
+              </label>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Nivel</label><input data-field="nivel" value="{{ d.nivel }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:5px;"><label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Ciega grande</label><input data-field="ciega" value="{{ d.ciega }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;"></div>
+        </div>
+        <div style="font-size:13px;color:#7a7259;line-height:1.3;margin-top:-8px;">Con la ciega grande se calculan los BB de cada jugador. Déjala vacía para ocultarlos.</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Texto en el centro de la mesa</label>
+          <input data-field="centro" value="{{ d.centro }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Vista</label>
+          <select data-field="vista" value="{{ d.vista }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:11px 12px;outline:none;">
+            <option value="ambos">Mesa + conteo de fichas</option>
+            <option value="mesa">Solo mesa</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:#8f866f;width:58px;">Tamaño</span><input type="range" min="22" max="40" data-size="nombre" value="{{ szBase.nombre }}" onChange="{{ onSize }}" style="flex:1;"></div>
+        </sc-if>
+
+        <sc-if value="{{ showBajada }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Descripción</label>
+          <textarea data-field="bajada" value="{{ d.bajada }}" onChange="{{ onField }}" rows="3" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;resize:vertical;line-height:1.25;"></textarea>
+        </div>
+        </sc-if>
+
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Dirección web</label>
+          <input data-field="web" value="{{ d.web }}" onChange="{{ onField }}" style="width:100%;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#fff;font-size:18px;padding:10px 12px;outline:none;">
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const STORAGE_KEY = 'beatpoker-studio-v1';
+const DEF_PHOTO = 'assets/jc_photo.jpg';
+const DEF_EVENT = 'assets/osop_original.png';
+// Fotos de jugadores incluidas, por nombre normalizado (slug). Se sobrescriben desde el panel.
+const PLAYER_PHOTOS = {};
+['pablo-encina-zapata','jonathan-vilares','alonso-hidalgo','daniel-saez','hector-munoz','rodrigo-maclean','matias-alvarez','juan-parra','rodolfo-contreras']
+  .forEach((k) => { PLAYER_PHOTOS[k] = 'assets/players/' + k + '.webp'; });
+
+class Component extends DCLogic {
+  presets = {
+    ganador: {
+      data: {
+        kicker: 'Main Event · OSOP',
+        titulo: 'Campeón\ndel Main Event',
+        montoLabel: 'Premio ganado',
+        monto: '$18.500.000',
+        moneda: 'CLP',
+        rank: '',
+        nombre: 'Juan Carlos Carrasco',
+        bajada: 'Se quedó con el título más importante de la serie tras dominar la mesa final del Main Event OSOP en Ovalle Casino & Resort.',
+        web: 'Beatpoker.cl',
+      },
+      sizes: { titulo: 96, monto: 190, nombre: 60, logoSize: 150 },
+    },
+    chipleader: {
+      data: {
+        kicker: 'Main Event · OSOP · Día 1A',
+        titulo: 'Chip\nLeader',
+        montoLabel: 'Stack de fichas',
+        monto: '2.450.000',
+        moneda: 'PTS',
+        rank: '1°',
+        nombre: 'Juan Carlos Carrasco',
+        bajada: 'Lidera el conteo de fichas al cierre del Día 1A del Main Event OSOP.',
+        web: 'Beatpoker.cl',
+      },
+      sizes: { titulo: 150, monto: 168, nombre: 56, logoSize: 150 },
+    },
+    proximos: {
+      data: {
+        kicker: 'Calendario · Serie de Julio',
+        titulo: 'OSOP\nElite',
+        fecha: '07 → 12 de Julio',
+        montoLabel: 'Garantizados a repartir',
+        monto: '$100.000.000',
+        moneda: '',
+        sub1val: '$50.000.000', sub1label: 'Main Event',
+        sub2val: '$25.000.000', sub2label: 'High Roller',
+        nombre: 'Ovalle Casino & Resort · 16 torneos',
+        bajada: 'Desliza para ver el calendario →',
+        web: 'Beatpoker.cl',
+      },
+      sizes: { titulo: 120, monto: 150, nombre: 60, logoSize: 150 },
+    },
+    live: {
+      data: {
+        kicker: 'Main Event · OSOP',
+        titulo: 'Así\nva la Mesa',
+        statFichas: '2.450.000', statNivel: 'Nivel 18 · 6K/12K',
+        statJugadores: '42 de 180', statBuyin: '$120.000',
+        statGarantizado: '$50.000.000', statFecha: 'Día 1A · 08 Jul',
+        labelFichas: 'Promedio de fichas', labelNivel: 'Nivel',
+        labelJugadores: 'Jugadores', labelBuyin: 'Buy-in',
+        labelGarantizado: 'Garantizado', labelFecha: 'Fecha',
+        web: 'Beatpoker.cl',
+      },
+      sizes: { titulo: 110, monto: 150, nombre: 56, logoSize: 150 },
+    },
+    resultados: {
+      data: {
+        kicker: 'Main Event · OSOP',
+        titulo: 'Resultados\nMesa Final',
+        lista: 'Juan Carlos Carrasco | $18.500.000\nDiego Fuentes | $11.200.000\nCamila Rojas | $7.400.000\nMatías Herrera | $5.100.000\nAndrés Soto | $3.600.000\nPaula Ibáñez | $2.700.000',
+        bajada: '',
+        web: 'Beatpoker.cl',
+      },
+      sizes: { titulo: 104, monto: 150, nombre: 46, logoSize: 150 },
+    },
+    mesa: {
+      data: {
+        kicker: 'Main Poker Hub',
+        titulo: 'Mesa Final',
+        mesa: 'Pablo Encina Zapata | 391000\nJonathan Vilares | 170000\nAlonso Hidalgo | 152000\nDaniel Saez | 435000\nHéctor Muñoz | 100000\nRodrigo Maclean | 206000\nMatías Álvarez | 270000\nJuan Parra | 240000\nRodolfo Contreras | 300000',
+        nivel: 'Nivel 17',
+        ciega: '10.000',
+        centro: 'Cobertura por BeatPoker',
+        vista: 'ambos',
+        web: 'Beatpoker.cl',
+      },
+      sizes: { titulo: 96, monto: 150, nombre: 30, logoSize: 150 },
+    },
+  };
+
+  allDefaults = {
+    kicker: 'Main Event · OSOP',
+    titulo: 'Campeón\ndel Main Event',
+    montoLabel: 'Premio ganado',
+    monto: '$18.500.000',
+    moneda: 'CLP',
+    rank: '',
+    nombre: 'Juan Carlos Carrasco',
+    bajada: 'Se quedó con el título más importante de la serie tras dominar la mesa final del Main Event OSOP en Ovalle Casino & Resort.',
+    web: 'Beatpoker.cl',
+    fecha: '07 → 12 de Julio',
+    sub1val: '$50.000.000', sub1label: 'Main Event',
+    sub2val: '$25.000.000', sub2label: 'High Roller',
+    statFichas: '2.450.000', statNivel: 'Nivel 18 · 6K/12K',
+    statJugadores: '42 de 180', statBuyin: '$120.000',
+    statGarantizado: '$50.000.000', statFecha: 'Día 1A · 08 Jul',
+    // Nombres de los recuadros del mini resumen. Editables desde el panel.
+    labelFichas: 'Promedio de fichas', labelNivel: 'Nivel',
+    labelJugadores: 'Jugadores', labelBuyin: 'Buy-in',
+    labelGarantizado: 'Garantizado', labelFecha: 'Fecha',
+    lista: 'Juan Carlos Carrasco | $18.500.000\nDiego Fuentes | $11.200.000\nCamila Rojas | $7.400.000',
+    mesa: '', nivel: 'Nivel 17', ciega: '10.000', centro: 'Cobertura por BeatPoker', vista: 'ambos'
+  };
+
+  state = {
+    template: 'ganador',
+    format: 'story',
+    scale: 0.4,
+    flagCode: 'cl',
+    photoUrl: DEF_PHOTO,
+    flagUrl: 'flags/cl.png',
+    eventLogoUrl: DEF_EVENT,
+    photoPosY: 28,
+    photoZoom: 100,
+    montoFit: 1,
+    panelFit: 1,
+    exporting: false,
+    playerPhotos: {},
+    sizes: { titulo: 96, monto: 190, nombre: 60, logoSize: 150 },
+    data: { ...this.allDefaults },
+  };
+
+  dims() {
+    return this.state.format === 'story'
+      ? { artW: 1080, artH: 1920, photoH: 1360, panelTop: 1120, gap: 34 }
+      : { artW: 1080, artH: 1350, photoH: 800, panelTop: 660, gap: 20 };
+  }
+
+  // ---------- persistencia ----------
+  PERSIST = ['template','format','flagCode','flagUrl','photoUrl','eventLogoUrl','photoPosY','photoZoom','sizes','data','playerPhotos'];
+
+  save = () => {
+    const snap = {};
+    for (const k of this.PERSIST) snap[k] = this.state[k];
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(snap));
+    } catch (e) {
+      // Una foto en dataURL puede exceder la cuota: guarda el resto sin imágenes.
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...snap, photoUrl: DEF_PHOTO, eventLogoUrl: DEF_EVENT })); } catch (_) {}
+    }
+  };
+  saveSoon = () => { clearTimeout(this._saveT); this._saveT = setTimeout(this.save, 500); };
+
+  restore = () => {
+    let raw;
+    try { raw = localStorage.getItem(STORAGE_KEY); } catch (_) { return; }
+    if (!raw) return;
+    let snap;
+    try { snap = JSON.parse(raw); } catch (_) { return; }
+    if (!snap || !this.presets[snap.template]) return;
+    const next = {};
+    for (const k of this.PERSIST) if (snap[k] != null) next[k] = snap[k];
+    next.data = { ...this.allDefaults, ...(snap.data || {}) };
+    next.sizes = { ...this.presets[snap.template].sizes, ...(snap.sizes || {}) };
+    if (!next.photoUrl) next.photoUrl = DEF_PHOTO;
+    if (!next.eventLogoUrl) next.eventLogoUrl = DEF_EVENT;
+    this.setState(next);
+  };
+
+  onReset = () => {
+    if (!confirm('¿Volver la plantilla a sus valores por defecto? Se pierde lo que hayas editado.')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+    const p = this.presets[this.state.template];
+    this._montoFit = 1; this._panelFit = 1;
+    this.setState({
+      data: { ...this.allDefaults, ...p.data },
+      sizes: { ...p.sizes },
+      photoUrl: DEF_PHOTO, eventLogoUrl: DEF_EVENT,
+      flagCode: 'cl', flagUrl: 'flags/cl.png',
+      photoPosY: 28, photoZoom: 100, montoFit: 1, panelFit: 1, playerPhotos: {},
+    });
+  };
+
+  // ---------- auto-ajuste ----------
+  // 948 = 1080 - 2×66 de padding lateral: el ancho útil del artboard.
+  fitMonto = () => {
+    const el = this.montoRef;
+    if (!el) return;
+    // offsetWidth NO sirve: como flex item de una columna con align-items:stretch, el
+    // wrapper mide siempre 948 y el número se desborda (nowrap) sin que se note.
+    // scrollWidth sí incluye ese desborde.
+    const natural = el.scrollWidth;
+    if (!natural) return;
+    const s = Math.min(1, 948 / natural);
+    if (Math.abs(s - (this._montoFit || 1)) > 0.004) { this._montoFit = s; this.setState({ montoFit: s }); }
+  };
+
+  fitPanel = () => {
+    const outer = this.panelRef, inner = this.panelInnerRef;
+    if (!outer || !inner) return;
+    const prev = inner.style.transform;
+    inner.style.transform = 'none';
+    const natural = inner.offsetHeight;
+    inner.style.transform = prev;
+    const box = outer.clientHeight - parseFloat(getComputedStyle(inner).bottom);
+    if (!natural || !(box > 0)) return;
+    const s = Math.min(1, box / natural);
+    if (Math.abs(s - (this._panelFit || 1)) > 0.004) { this._panelFit = s; this.setState({ panelFit: s }); }
+  };
+
+  computeScale = () => {
+    const stage = this.stageRef;
+    if (!stage) return;
+    const { artW, artH } = this.dims();
+    const s = Math.max(0.1, Math.min((stage.clientWidth - 72) / artW, (stage.clientHeight - 72) / artH, 0.62));
+    if (Math.abs(s - this.state.scale) > 0.002) this.setState({ scale: s });
+  };
+
+  componentDidMount() {
+    this.restore();
+    this._prevFormat = this.state.format;
+    this._ro = new ResizeObserver(() => this.computeScale());
+    if (this.stageRef) this._ro.observe(this.stageRef);
+    this._onResize = () => this.computeScale();
+    window.addEventListener('resize', this._onResize);
+    this.computeScale();
+    this.fitMonto();
+    this.fitPanel();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { this.fitMonto(); this.fitPanel(); });
+  }
+  // OJO: el runtime llama componentDidUpdate(prevProps) — un argumento, y son props,
+  // no prevState. Leer `prev.format` lanzaba y abortaba el resto del método (el auto-ajuste
+  // dejaba de correr en cada edición). Guardamos el formato anterior a mano.
+  componentDidUpdate() {
+    if (this._prevFormat !== this.state.format) {
+      this._prevFormat = this.state.format;
+      this.computeScale();
+    }
+    this.fitMonto();
+    this.fitPanel();
+    this.saveSoon();
+  }
+  componentWillUnmount() {
+    if (this._ro) this._ro.disconnect();
+    window.removeEventListener('resize', this._onResize);
+    clearTimeout(this._saveT);
+  }
+
+  onArtRef = (el) => { this.artRef = el; };
+  onStageRef = (el) => { this.stageRef = el; };
+  onMontoRef = (el) => { this.montoRef = el; if (el) requestAnimationFrame(this.fitMonto); };
+  onPanelRef = (el) => { this.panelRef = el; if (el) requestAnimationFrame(this.fitPanel); };
+  onPanelInnerRef = (el) => { this.panelInnerRef = el; if (el) requestAnimationFrame(this.fitPanel); };
+
+  onSelectTpl = (e) => {
+    const t = e.currentTarget.dataset.tpl;
+    const p = this.presets[t];
+    if (!p) return;
+    this._montoFit = 1; this._panelFit = 1;
+    this.setState({ template: t, data: { ...this.allDefaults, ...p.data }, sizes: { ...p.sizes }, montoFit: 1, panelFit: 1 });
+  };
+
+  onFormat = (e) => this.setState({ format: e.currentTarget.dataset.fmt });
+  onField = (e) => { const k = e.target.dataset.field, v = e.target.value; this.setState((s) => ({ data: { ...s.data, [k]: v } })); };
+  onSize = (e) => { const k = e.target.dataset.size, v = +e.target.value; this.setState((s) => ({ sizes: { ...s.sizes, [k]: v } })); };
+  onFrame = (e) => { const k = e.target.dataset.frame, v = +e.target.value; this.setState({ [k]: v }); };
+  onFlag = (e) => { const c = e.target.value; this.setState({ flagCode: c, flagUrl: c === 'none' ? '' : 'flags/' + c + '.png' }); };
+  onFile = (e) => {
+    const t = e.target.dataset.target;
+    const pkey = e.target.dataset.key;
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      if (t === 'player') {
+        // Se reduce a 256px: una foto completa en dataURL revienta la cuota de localStorage.
+        const im = new Image();
+        im.onload = () => {
+          const k = Math.min(1, 256 / Math.min(im.width, im.height));
+          const c = document.createElement('canvas');
+          c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+          c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+          this.setState((s) => ({ playerPhotos: { ...s.playerPhotos, [pkey]: c.toDataURL('image/jpeg', 0.85) } }));
+        };
+        im.src = r.result;
+      }
+      else if (t === 'photo') this.setState({ photoUrl: r.result });
+      else if (t === 'event') this.setState({ eventLogoUrl: r.result });
+    };
+    r.readAsDataURL(f);
+    e.target.value = '';
+  };
+
+  slug = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+
+  onExport = async () => {
+    if (this.state.exporting) return;
+    const node = this.artRef;
+    if (!node || !window.htmlToImage) { alert('No se pudo exportar (librería no cargada).'); return; }
+    const { artW, artH } = this.dims();
+    this.setState({ exporting: true });
+    try {
+      // Sin esto el PNG puede salir con la fuente de sistema en vez de Anton.
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      const opts = {
+        width: artW, height: artH, pixelRatio: 2,
+        style: { transform: 'none', transformOrigin: 'top left', margin: '0', boxShadow: 'none' },
+      };
+      // La primera pasada calienta el caché de imágenes/fuentes incrustadas;
+      // la segunda es la que sale completa.
+      await window.htmlToImage.toPng(node, opts);
+      const dataUrl = await window.htmlToImage.toPng(node, opts);
+      const tpl = this.state.template;
+      const who = this.slug(tpl === 'ganador' || tpl === 'chipleader' ? this.state.data.nombre : this.state.data.titulo.replace(/\n/g, ' '));
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = ['beatpoker', tpl, this.state.format, who].filter(Boolean).join('-') + '.png';
+      a.click();
+    } catch (err) {
+      console.error(err);
+      alert('Error al exportar: ' + err.message);
+    } finally {
+      this.setState({ exporting: false });
+    }
+  };
+
+  buildRows(sz, isStory) {
+    const nameSize = sz.nombre;
+    const badgeSize = Math.round(nameSize * 0.9);
+    const prizeSize = Math.round(nameSize * 1.02);
+    const padV = isStory ? 12 : 9;
+    const medals = [
+      'background:linear-gradient(135deg,#F5D879,#D4A017);color:#1a1206',
+      'background:linear-gradient(135deg,#e8e0cf,#8f866f);color:#1a1206',
+      'background:linear-gradient(135deg,#c98f4b,#8a5a24);color:#1a1206',
+    ];
+    return (this.state.data.lista || '').split('\n')
+      .map((l) => l.trim()).filter(Boolean).slice(0, 10)
+      .map((line, i) => {
+        const cut = line.indexOf('|');
+        const nombre = (cut < 0 ? line : line.slice(0, cut)).trim();
+        const premio = (cut < 0 ? '' : line.slice(cut + 1)).trim();
+        const first = i === 0;
+        return {
+          pos: (i + 1) + '°',
+          nombre,
+          premio,
+          rowStyle: 'display:flex;align-items:center;gap:18px;padding:' + padV + 'px 20px;border-radius:8px;'
+            + (first
+              ? 'background:linear-gradient(90deg,#241c10,#191308);border:1px solid rgba(212,160,23,.6);box-shadow:inset 6px 0 0 #D4A017, 0 12px 30px rgba(0,0,0,.4)'
+              : 'background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.22)'),
+          badgeStyle: 'flex:none;min-width:' + Math.round(nameSize * 1.9) + 'px;text-align:center;font-family:\'Anton\',sans-serif;'
+            + 'font-size:' + badgeSize + 'px;line-height:1;padding:8px 12px;border-radius:8px;'
+            + (medals[i] || 'background:transparent;color:#8f866f;box-shadow:inset 0 0 0 1px rgba(212,160,23,.35)'),
+          nameStyle: 'flex:1;min-width:0;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:' + nameSize + 'px;'
+            + 'line-height:1;text-transform:uppercase;letter-spacing:.5px;color:' + (first ? '#fff' : '#e8e0cf')
+            + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis',
+          prizeStyle: 'flex:none;font-family:\'Anton\',sans-serif;font-size:' + prizeSize + 'px;line-height:1;padding-bottom:.1em;'
+            + (first
+              ? 'background:linear-gradient(180deg,#FBEBA6,#F5D879 32%,#D4A017 62%,#a97a12);-webkit-background-clip:text;background-clip:text;color:transparent'
+              : 'color:#F5D879'),
+        };
+      });
+  }
+
+  // Mesa: los jugadores se leen en orden de asiento (1 arriba, sentido horario).
+  // El ranking de fichas se ordena solo; la mesa respeta el orden escrito.
+  buildMesa(sz, isStory) {
+    const dots = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const short = (n) => {
+      if (n >= 1e6) return (Math.round(n / 1e4) / 100).toString().replace('.', ',') + 'M';
+      if (n >= 1000) return Math.round(n / 1000) + 'K';
+      return String(n);
+    };
+    const ciega = parseInt(String(this.state.data.ciega || '').replace(/\D/g, ''), 10) || 0;
+    const players = (this.state.data.mesa || '').split('\n').map((l) => l.trim()).filter(Boolean).slice(0, 10)
+      .map((line, i) => {
+        const [nombre = '', fichas = ''] = line.split('|').map((s) => s.trim());
+        const chips = parseInt(fichas.replace(/\D/g, ''), 10) || 0;
+        const key = this.slug(nombre);
+        return { seat: i + 1, nombre, key, chips, photo: this.state.playerPhotos[key] || PLAYER_PHOTOS[key] || '' };
+      });
+    const n = players.length || 1;
+    const ry = 245, rx = 360, cx = 474, h = 2 * (ry + 72), cy = h / 2;
+    const nameSize = sz.nombre;
+    const seats = players.map((p, i) => {
+      const a = (2 * Math.PI * i) / n;
+      const x = Math.round(cx + rx * Math.sin(a)), y = Math.round(cy - ry * Math.cos(a));
+      return {
+        pos: p.seat, nombre: p.nombre, k: short(p.chips), key: p.key,
+        photoUrl: p.photo,
+        photoStyle: p.photo ? 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;border-radius:50%;display:block' : 'display:none',
+        numStyle: p.photo ? 'display:none' : 'position:relative',
+        badgeStyle: p.photo ? 'position:absolute;top:-6px;right:-8px;width:34px;height:34px;border-radius:50%;background:#14100a;border:2px solid #D4A017;color:#F5D879;font-family:\'Anton\',sans-serif;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;padding-bottom:1px;z-index:3' : 'display:none',
+        style: 'position:absolute;left:' + x + 'px;top:' + y + 'px;width:180px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;z-index:2',
+        nameStyle: 'width:100%;text-align:center;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:23px;line-height:1.05;text-transform:uppercase;letter-spacing:.3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis',
+      };
+    });
+    const padV = isStory ? 8 : 6;
+    const ranking = players.slice().sort((a, b) => b.chips - a.chips).map((p, i) => {
+      const first = i === 0;
+      return {
+        rank: i + 1, nombre: p.nombre,
+        fichas: dots(p.chips),
+        bb: ciega ? Math.round(p.chips / ciega) + ' BB' : '',
+        rowStyle: 'display:flex;align-items:center;gap:16px;padding:' + padV + 'px 18px;border-radius:8px;'
+          + (first
+            ? 'background:linear-gradient(90deg,#241c10,#191308);border:1px solid rgba(212,160,23,.6);box-shadow:inset 6px 0 0 #D4A017, 0 12px 30px rgba(0,0,0,.4)'
+            : 'background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.22)'),
+        badgeStyle: 'flex:none;min-width:' + Math.round(nameSize * 1.5) + 'px;text-align:center;font-family:\'Anton\',sans-serif;font-size:' + Math.round(nameSize * 0.9) + 'px;line-height:1;padding:5px 8px;border-radius:7px;'
+          + (first ? 'background:linear-gradient(135deg,#F5D879,#D4A017);color:#1a1206' : 'background:transparent;color:#8f866f;box-shadow:inset 0 0 0 1px rgba(212,160,23,.35)'),
+        nameStyle: 'flex:1;min-width:0;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:' + nameSize + 'px;line-height:1;text-transform:uppercase;letter-spacing:.5px;color:' + (first ? '#fff' : '#e8e0cf') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis',
+        chipsStyle: 'flex:none;font-family:\'Anton\',sans-serif;font-size:' + Math.round(nameSize * 1.1) + 'px;line-height:1;padding-bottom:.08em;'
+          + (first ? 'background:linear-gradient(180deg,#FBEBA6,#F5D879 32%,#D4A017 62%,#a97a12);-webkit-background-clip:text;background-clip:text;color:transparent' : 'color:#F5D879'),
+        bbStyle: 'flex:none;min-width:' + Math.round(nameSize * 2.4) + 'px;text-align:right;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:' + Math.round(nameSize * 0.8) + 'px;letter-spacing:1px;color:#8f866f' + (ciega ? '' : ';display:none'),
+      };
+    });
+    return {
+      seats, ranking, h,
+      rowGap: isStory ? 8 : 6,
+      count: players.length === 1 ? '1 jugador' : players.length + ' jugadores',
+      feltStyle: 'position:absolute;left:' + (cx - rx) + 'px;top:' + (cy - ry) + 'px;width:' + (2 * rx) + 'px;height:' + (2 * ry) + 'px;border-radius:50%;'
+        + 'background:radial-gradient(ellipse at 50% 38%,#7a2a1c 0%,#4a160f 55%,#260a06 100%);'
+        + 'box-shadow:0 0 0 5px rgba(212,160,23,.55),0 0 0 11px rgba(13,11,7,.9),inset 0 0 90px rgba(0,0,0,.6),0 24px 60px rgba(0,0,0,.55);'
+        + 'display:flex;flex-direction:column;align-items:center;justify-content:center',
+    };
+  }
+
+  renderVals() {
+    const { artW, artH, photoH, gap } = this.dims();
+    const scale = this.state.scale;
+    const isStory = this.state.format === 'story';
+    const tpl = this.state.template;
+    const isChip = tpl === 'chipleader';
+    const isPersona = tpl === 'ganador' || tpl === 'chipleader';
+    const isProximos = tpl === 'proximos';
+    const isLive = tpl === 'live';
+    const isResultados = tpl === 'resultados';
+    const isMesa = tpl === 'mesa';
+    const fmtK = isStory ? 1 : 0.82;
+    const base = this.state.sizes;
+    const sz = { titulo: Math.round(base.titulo * fmtK), monto: Math.round(base.monto * fmtK), nombre: Math.round(base.nombre * fmtK) };
+    const mesa = isMesa ? this.buildMesa(sz, isStory) : { seats: [], ranking: [], h: 0, rowGap: 0, count: '', feltStyle: '' };
+    const logoSize = base.logoSize || 150;
+    const rows = isResultados ? this.buildRows(sz, isStory) : [];
+    const btnBase = 'cursor:pointer;border:none;background:transparent;color:#8f866f;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;padding:8px 14px;border-radius:8px;';
+    const btnOn = 'cursor:pointer;border:none;color:#1a1206;font-weight:800;font-size:15px;letter-spacing:1px;text-transform:uppercase;padding:8px 14px;border-radius:8px;background:linear-gradient(135deg,#F5D879,#D4A017);';
+    const cardOn = 'cursor:pointer;display:flex;gap:12px;align-items:center;padding:10px;border-radius:12px;border:1px solid rgba(212,160,23,.6);background:linear-gradient(135deg,rgba(212,160,23,.14),rgba(212,160,23,.03));';
+    const cardOff = 'cursor:pointer;display:flex;gap:12px;align-items:center;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:transparent;';
+    const titles = { ganador: 'Ganador', chipleader: 'Chip Leader', proximos: 'Próximos eventos', live: 'Cobertura en vivo', resultados: 'Resultados', mesa: 'Mesa' };
+    const exporting = this.state.exporting;
+    return {
+      d: this.state.data,
+      sz,
+      szBase: base,
+      rows,
+      rowGap: isStory ? 14 : 10,
+      rowsCount: rows.length === 1 ? '1 puesto' : rows.length + ' puestos',
+      bpLogoH: Math.round(logoSize * 0.46),
+      evLogoBox: logoSize,
+      photoPosY: this.state.photoPosY,
+      photoZoom: this.state.photoZoom,
+      photoZoomF: this.state.photoZoom / 100,
+      artW, artH, photoH, gap, scale,
+      // Borde inferior del header + aire. El contenido puede subir hasta aquí sin chocar
+      // con los logos; pasado ese punto, fitPanel lo encoge.
+      safeTop: 46 + logoSize + 24,
+      scaledW: Math.round(artW * scale),
+      scaledH: Math.round(artH * scale),
+      photoUrl: this.state.photoUrl,
+      flagUrl: this.state.flagUrl,
+      flagCode: this.state.flagCode,
+      eventLogoUrl: this.state.eventLogoUrl,
+      hasFlag: !!this.state.flagUrl,
+      hasRank: !!(this.state.data.rank && this.state.data.rank.trim()),
+      hasBajada: !!(this.state.data.bajada || '').trim(),
+      isChip, isPersona, isProximos, isLive, isResultados, isMesa,
+      showFlagSel: isPersona,
+      flagLabel: 'Bandera del país',
+      mesa,
+      showRanking: this.state.data.vista !== 'mesa',
+      cardMesa: isMesa ? cardOn : cardOff,
+      showMonto: isPersona || isProximos,
+      showBajada: isPersona || isProximos || isResultados,
+      hasFichas: !!(this.state.data.statFichas || '').trim(),
+      hasNivel: !!(this.state.data.statNivel || '').trim(),
+      hasJugadores: !!(this.state.data.statJugadores || '').trim(),
+      hasBuyin: !!(this.state.data.statBuyin || '').trim(),
+      hasGarantizado: !!(this.state.data.statGarantizado || '').trim(),
+      hasFecha: !!(this.state.data.statFecha || '').trim(),
+      tplTitle: titles[tpl] || 'Plantilla',
+      zoomLabel: Math.round(scale * 100) + '%',
+      exporting,
+      exportLabel: exporting ? 'Exportando…' : 'Exportar PNG',
+      exportBtnStyle: 'display:inline-flex;align-items:center;gap:9px;border:none;color:#1a1206;font-weight:800;font-size:17px;letter-spacing:1px;text-transform:uppercase;padding:11px 22px;border-radius:10px;box-shadow:0 6px 18px rgba(212,160,23,.3);background:linear-gradient(135deg,#F5D879,#D4A017 60%,#a97a12);'
+        + (exporting ? 'cursor:wait;opacity:.6' : 'cursor:pointer'),
+      storyBtnStyle: isStory ? btnOn : btnBase,
+      postBtnStyle: isStory ? btnBase : btnOn,
+      cardGanador: tpl === 'ganador' ? cardOn : cardOff,
+      cardChip: isChip ? cardOn : cardOff,
+      cardProximos: isProximos ? cardOn : cardOff,
+      cardLive: isLive ? cardOn : cardOff,
+      cardResultados: isResultados ? cardOn : cardOff,
+      montoFit: this.state.montoFit,
+      panelFit: this.state.panelFit,
+      onArtRef: this.onArtRef,
+      onStageRef: this.onStageRef,
+      onMontoRef: this.onMontoRef,
+      onPanelRef: this.onPanelRef,
+      onPanelInnerRef: this.onPanelInnerRef,
+      onSelectTpl: this.onSelectTpl,
+      onFormat: this.onFormat,
+      onField: this.onField,
+      onSize: this.onSize,
+      onFrame: this.onFrame,
+      onFlag: this.onFlag,
+      onFile: this.onFile,
+      onExport: this.onExport,
+      onReset: this.onReset,
+    };
+  }
+}
+</script>
+</body>
+</html>
