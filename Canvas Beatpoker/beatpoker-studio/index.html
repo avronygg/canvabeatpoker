@@ -511,6 +511,9 @@
 <script type="text/x-dc" data-dc-script>
 const STORAGE_KEY = 'beatpoker-studio-v1';
 const DEF_PHOTO = 'assets/jc_photo.jpg';
+const MESA_PHOTO = 'assets/mesa_bg.jpg';
+// Foto de fondo por defecto de cada plantilla (la mesa trae la suya).
+const defPhoto = (tpl) => (tpl === 'mesa' ? MESA_PHOTO : DEF_PHOTO);
 const DEF_EVENT = 'assets/osop_original.png';
 // Fotos de jugadores incluidas, por nombre normalizado (slug). Se sobrescriben desde el panel.
 const PLAYER_PHOTOS = {};
@@ -679,7 +682,7 @@ class Component extends DCLogic {
     for (const k of this.PERSIST) if (snap[k] != null) next[k] = snap[k];
     next.data = { ...this.allDefaults, ...(snap.data || {}) };
     next.sizes = { ...this.presets[snap.template].sizes, ...(snap.sizes || {}) };
-    if (!next.photoUrl) next.photoUrl = DEF_PHOTO;
+    if (!next.photoUrl || next.photoUrl === DEF_PHOTO || next.photoUrl === MESA_PHOTO) next.photoUrl = defPhoto(snap.template);
     if (!next.eventLogoUrl) next.eventLogoUrl = DEF_EVENT;
     this.setState(next);
   };
@@ -692,7 +695,7 @@ class Component extends DCLogic {
     this.setState({
       data: { ...this.allDefaults, ...p.data },
       sizes: { ...p.sizes },
-      photoUrl: DEF_PHOTO, eventLogoUrl: DEF_EVENT,
+      photoUrl: defPhoto(this.state.template), eventLogoUrl: DEF_EVENT,
       flagCode: 'cl', flagUrl: 'flags/cl.png',
       photoPosY: 28, photoZoom: 100, montoFit: 1, panelFit: 1, playerPhotos: {}, playerFlags: {},
     });
@@ -774,7 +777,9 @@ class Component extends DCLogic {
     const p = this.presets[t];
     if (!p) return;
     this._montoFit = 1; this._panelFit = 1;
-    this.setState({ template: t, data: { ...this.allDefaults, ...p.data }, sizes: { ...p.sizes }, montoFit: 1, panelFit: 1 });
+    // Si la foto sigue siendo la de fábrica, cambia a la de fábrica de la nueva plantilla.
+    const isDef = this.state.photoUrl === DEF_PHOTO || this.state.photoUrl === MESA_PHOTO;
+    this.setState({ template: t, data: { ...this.allDefaults, ...p.data }, sizes: { ...p.sizes }, montoFit: 1, panelFit: 1, ...(isDef ? { photoUrl: defPhoto(t) } : {}) });
   };
 
   onFormat = (e) => this.setState({ format: e.currentTarget.dataset.fmt });
