@@ -254,7 +254,10 @@
                     <span style="{{ s.badgeStyle }}">{{ s.pos }}</span>
                   </div>
                   <div style="width:100%;padding:34px 8px 9px;border-radius:12px;border:1px solid rgba(212,160,23,.45);background:linear-gradient(180deg,#241c10,#140f08);box-shadow:0 10px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;gap:3px;">
-                    <div style="{{ s.nameStyle }}">{{ s.nombre }}</div>
+                    <div style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-width:0;">
+                      <img src="{{ s.flagUrl }}" alt="" style="{{ s.flagStyle }}">
+                      <div style="{{ s.nameStyle }}">{{ s.nombre }}</div>
+                    </div>
                     <div style="font-family:'Anton',sans-serif;font-size:32px;line-height:1;color:#F5D879;">{{ s.k }}</div>
                   </div>
                 </div>
@@ -269,6 +272,7 @@
               <sc-for list="{{ mesa.ranking }}" as="r">
                 <div style="{{ r.rowStyle }}">
                   <div style="{{ r.badgeStyle }}">{{ r.rank }}</div>
+                  <img src="{{ r.flagUrl }}" alt="" style="{{ r.flagStyle }}">
                   <div style="{{ r.nameStyle }}">{{ r.nombre }}</div>
                   <div style="{{ r.chipsStyle }}">{{ r.fichas }}</div>
                   <div style="{{ r.bbStyle }}">{{ r.bb }}</div>
@@ -449,8 +453,8 @@
           <div style="font-size:14px;color:#7a7259;">{{ mesa.count }}</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;">
-          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Fotos de los jugadores</label>
-          <div style="font-size:14px;color:#7a7259;line-height:1.35;">Toca el nombre para cambiar la foto. La foto queda ligada al nombre del jugador.</div>
+          <label style="font-size:14px;color:#8f866f;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Fotos y banderas de los jugadores</label>
+          <div style="font-size:14px;color:#7a7259;line-height:1.35;">Toca el nombre para cambiar la foto y usa el selector para elegir la bandera de cada jugador. Foto y bandera quedan ligadas al nombre.</div>
           <sc-for list="{{ mesa.seats }}" as="s">
             <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid rgba(212,160,23,.22);">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;flex:1;min-width:0;color:#c9bfa6;font-weight:600;font-size:16px;" title="Cambiar foto">
@@ -459,6 +463,8 @@
                 <span style="color:#D4A017;font-size:12px;letter-spacing:1px;text-transform:uppercase;">Foto</span>
                 <input type="file" accept="image/*" data-target="player" data-key="{{ s.key }}" onChange="{{ onFile }}" style="display:none;">
               </label>
+              <img src="{{ s.flagUrl }}" alt="" style="{{ s.flagStyle }}">
+              <select data-key="{{ s.key }}" value="{{ s.flagCode }}" onChange="{{ onPlayerFlag }}" title="Bandera" style="width:112px;flex:none;background:#0f0c07;border:1px solid rgba(212,160,23,.25);border-radius:6px;color:#fff;font-size:14px;padding:6px 4px;outline:none;"><option value="cl">Chile</option><option value="ar">Argentina</option><option value="pe">Perú</option><option value="br">Brasil</option><option value="mx">México</option><option value="co">Colombia</option><option value="uy">Uruguay</option><option value="py">Paraguay</option><option value="bo">Bolivia</option><option value="ec">Ecuador</option><option value="ve">Venezuela</option><option value="es">España</option><option value="us">Estados Unidos</option><option value="none">Sin bandera</option></select>
             </div>
           </sc-for>
         </div>
@@ -630,6 +636,7 @@ class Component extends DCLogic {
     panelFit: 1,
     exporting: false,
     playerPhotos: {},
+    playerFlags: {},
     sizes: { titulo: 96, monto: 190, nombre: 60, logoSize: 150 },
     data: { ...this.allDefaults },
   };
@@ -641,7 +648,7 @@ class Component extends DCLogic {
   }
 
   // ---------- persistencia ----------
-  PERSIST = ['template','format','flagCode','flagUrl','photoUrl','eventLogoUrl','photoPosY','photoZoom','sizes','data','playerPhotos'];
+  PERSIST = ['template','format','flagCode','flagUrl','photoUrl','eventLogoUrl','photoPosY','photoZoom','sizes','data','playerPhotos','playerFlags'];
 
   save = () => {
     const snap = {};
@@ -681,7 +688,7 @@ class Component extends DCLogic {
       sizes: { ...p.sizes },
       photoUrl: DEF_PHOTO, eventLogoUrl: DEF_EVENT,
       flagCode: 'cl', flagUrl: 'flags/cl.png',
-      photoPosY: 28, photoZoom: 100, montoFit: 1, panelFit: 1, playerPhotos: {},
+      photoPosY: 28, photoZoom: 100, montoFit: 1, panelFit: 1, playerPhotos: {}, playerFlags: {},
     });
   };
 
@@ -769,6 +776,7 @@ class Component extends DCLogic {
   onSize = (e) => { const k = e.target.dataset.size, v = +e.target.value; this.setState((s) => ({ sizes: { ...s.sizes, [k]: v } })); };
   onFrame = (e) => { const k = e.target.dataset.frame, v = +e.target.value; this.setState({ [k]: v }); };
   onFlag = (e) => { const c = e.target.value; this.setState({ flagCode: c, flagUrl: c === 'none' ? '' : 'flags/' + c + '.png' }); };
+  onPlayerFlag = (e) => { const k = e.target.dataset.key, c = e.target.value; this.setState((s) => ({ playerFlags: { ...s.playerFlags, [k]: c } })); };
   onFile = (e) => {
     const t = e.target.dataset.target;
     const pkey = e.target.dataset.key;
@@ -883,7 +891,8 @@ class Component extends DCLogic {
         const [nombre = '', fichas = ''] = line.split('|').map((s) => s.trim());
         const chips = parseInt(fichas.replace(/\D/g, ''), 10) || 0;
         const key = this.slug(nombre);
-        return { seat: i + 1, nombre, key, chips, photo: this.state.playerPhotos[key] || PLAYER_PHOTOS[key] || '' };
+        const flag = this.state.playerFlags[key] != null ? this.state.playerFlags[key] : 'cl';
+        return { seat: i + 1, nombre, key, chips, flag, photo: this.state.playerPhotos[key] || PLAYER_PHOTOS[key] || '' };
       });
     const n = players.length || 1;
     const ry = 245, rx = 360, cx = 474, h = 2 * (ry + 72), cy = h / 2;
@@ -893,12 +902,14 @@ class Component extends DCLogic {
       const x = Math.round(cx + rx * Math.sin(a)), y = Math.round(cy - ry * Math.cos(a));
       return {
         pos: p.seat, nombre: p.nombre, k: short(p.chips), key: p.key,
+        flagCode: p.flag, flagUrl: p.flag && p.flag !== 'none' ? 'flags/' + p.flag + '.png' : '',
+        flagStyle: p.flag && p.flag !== 'none' ? 'flex:none;width:30px;height:20px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.35);display:block' : 'display:none',
         photoUrl: p.photo,
         photoStyle: p.photo ? 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;border-radius:50%;display:block' : 'display:none',
         numStyle: p.photo ? 'display:none' : 'position:relative',
         badgeStyle: p.photo ? 'position:absolute;top:-6px;right:-8px;width:34px;height:34px;border-radius:50%;background:#14100a;border:2px solid #D4A017;color:#F5D879;font-family:\'Anton\',sans-serif;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;padding-bottom:1px;z-index:3' : 'display:none',
         style: 'position:absolute;left:' + x + 'px;top:' + y + 'px;width:180px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;z-index:2',
-        nameStyle: 'width:100%;text-align:center;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:23px;line-height:1.05;text-transform:uppercase;letter-spacing:.3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis',
+        nameStyle: 'width:auto;max-width:100%;min-width:0;text-align:center;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:23px;line-height:1.05;text-transform:uppercase;letter-spacing:.3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis',
       };
     });
     const padV = isStory ? 8 : 6;
@@ -906,6 +917,8 @@ class Component extends DCLogic {
       const first = i === 0;
       return {
         rank: i + 1, nombre: p.nombre,
+        flagUrl: p.flag && p.flag !== 'none' ? 'flags/' + p.flag + '.png' : '',
+        flagStyle: p.flag && p.flag !== 'none' ? 'flex:none;width:' + Math.round(nameSize * 1.1) + 'px;height:' + Math.round(nameSize * 0.74) + 'px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.35);display:block' : 'display:none',
         fichas: dots(p.chips),
         bb: ciega ? Math.round(p.chips / ciega) + ' BB' : '',
         rowStyle: 'display:flex;align-items:center;gap:16px;padding:' + padV + 'px 18px;border-radius:8px;'
@@ -1019,6 +1032,7 @@ class Component extends DCLogic {
       onSize: this.onSize,
       onFrame: this.onFrame,
       onFlag: this.onFlag,
+      onPlayerFlag: this.onPlayerFlag,
       onFile: this.onFile,
       onExport: this.onExport,
       onReset: this.onReset,
